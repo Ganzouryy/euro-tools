@@ -1,102 +1,140 @@
 # Euro-Tools Deployment Guide
 
-## Step 1: Create GitHub Repository
+## Prerequisites
 
-1. Go to https://github.com/new
-2. Repository name: `euro-tools`
-3. Description: `Premium B2B tool rental platform for European engineers in Egypt`
-4. Set to **Public** or **Private** (your choice)
-5. **DO NOT** initialize with README, .gitignore, or license (we already have these)
-6. Click "Create repository"
+Before deploying, ensure you have:
+- GitHub account
+- Vercel account (sign up at https://vercel.com)
+- All API keys ready (Supabase, DeepSeek, Paymob, Resend, etc.)
 
-## Step 2: Push to GitHub
+---
 
-After creating the repository, run these commands:
+## Step 1: Push to GitHub
 
-```bash
-cd "C:\Users\moham\OneDrive\Desktop\GANZ\Euro-Tools"
-git remote add origin https://github.com/YOUR_USERNAME/euro-tools.git
-git push -u origin main
-```
+The project is already configured with the GitHub repository:
+- Repository: `https://github.com/Ganzouryy/euro-tools.git`
+- Branch: `main`
 
-Replace `YOUR_USERNAME` with your actual GitHub username.
+---
 
-## Step 3: Deploy to Vercel
+## Step 2: Deploy to Vercel
 
 ### Option A: Deploy via Vercel Dashboard (Recommended)
 
 1. Go to https://vercel.com/new
 2. Click "Import Git Repository"
-3. Select your `euro-tools` repository
+3. Select your `Ganzouryy/euro-tools` repository
 4. Configure project:
-   - **Framework Preset**: Next.js
-   - **Root Directory**: ./
+   - **Framework Preset**: Next.js (auto-detected)
+   - **Root Directory**: `./`
    - **Build Command**: `npm run build`
-   - **Output Directory**: .next
+   - **Output Directory**: `.next`
 
 5. **Add Environment Variables** (CRITICAL):
+
+   Click "Environment Variables" and add each of these:
+
    ```
-   NEXT_PUBLIC_SUPABASE_URL=https://mmavupqyxxmmigsqznfs.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tYXZ1cHF5eHhtbWlnc3F6bmZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMDM0MjQsImV4cCI6MjEwNDc3OTQyNH0.KaK4DntAM1xTMHC2JASTgVWz45nQHjX27wAtHRGXC60
-   SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tYXZ1cHF5eHhtbWlnc3F6bmZzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTIwMzQyNCwiZXhwIjoyMTA0Nzc5NDI0fQ.Rp3Mrbwd17A8m0xoiuX7OAYUe5I1a-loN4k7sedezlM
-   DEEPSEEK_API_KEY=sk-b7d39019e1bf4379a949c47686d422f3
-   PAYMOB_API_KEY=ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1RJek56SXhMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuRnF0WHZxX0tjcEpjU0x6WDFHTW9KY2dPU0stMWRxbDRGb0JNRHIwWnZCaU9YelY0N0dQYU15aGNHZE4xY01FMVR3LXUzRDNLTkV5aHlOYnBnNXJOY2c=
-   PAYMOB_PUBLIC_KEY=egy_pk_test_DcCOxK7yDjsPfKs0MTvxY38PcTHnZsbW
-   PAYMOB_SECRET_KEY=egy_sk_test_6ab32edeb441faa5ab03754202a52b75867987f6b91e5ff57b86a8dcc40d7827
-   PAYMOB_HMAC=EAB6BDFA9FC99FF1D0C1A23F8BF75BBC
-   RESEND_API_KEY=re_P4GVJ1EQ_EgnYA24gvgr3Y6sqUfgg2vBP
-   EXCHANGE_RATE_API_KEY=30371676e0055ec0a3baf41b
+   NEXT_PUBLIC_SUPABASE_URL=<your_supabase_project_url>
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_supabase_anon_key>
+   SUPABASE_SERVICE_ROLE_KEY=<your_supabase_service_role_key>
+   DEEPSEEK_API_KEY=<your_deepseek_api_key>
+   PAYMOB_API_KEY=<your_paymob_api_key>
+   PAYMOB_PUBLIC_KEY=<your_paymob_public_key>
+   PAYMOB_SECRET_KEY=<your_paymob_secret_key>
+   PAYMOB_HMAC=<your_paymob_hmac>
+   RESEND_API_KEY=<your_resend_api_key>
+   EXCHANGE_RATE_API_KEY=<your_exchange_rate_api_key>
    NEXT_PUBLIC_APP_URL=https://your-vercel-domain.vercel.app
    ```
+
+   Replace all placeholder values with your actual API keys from `.env.local`
 
 6. Click **Deploy**
 
 ### Option B: Deploy via Vercel CLI
 
-Install Vercel CLI and deploy:
-
 ```bash
-npm i -g vercel
+npm install -g vercel
 cd "C:\Users\moham\OneDrive\Desktop\GANZ\Euro-Tools"
 vercel
 ```
 
-Follow the prompts and make sure to add all environment variables when asked.
-
-## Step 4: Post-Deployment
-
-1. **Update Supabase URL Whitelist**:
-   - Go to your Supabase project settings
-   - Add your Vercel domain to allowed origins
-
-2. **Test the Chatbot**:
-   - Visit your deployed site
-   - Click the blue chat button in the bottom-right
-   - Test a query like "What tools do you have for electrical work?"
-
-3. **Update NEXT_PUBLIC_APP_URL**:
-   - After deployment, update the `NEXT_PUBLIC_APP_URL` environment variable in Vercel
-   - Use your actual Vercel domain (e.g., `https://euro-tools.vercel.app`)
-
-## What's Deployed
-
-✅ Complete Euro-Tools platform with:
-- AI-powered chatbot (DeepSeek integration)
-- Homepage with trust indicators
-- Catalog pages
-- Authentication flow
-- Admin dashboard
-- KYC verification system
-- Checkout with Paymob test credentials
-- Custom tool request system
-
-## Next Steps
-
-1. Test all features on the live site
-2. Add production Stripe credentials when ready
-3. Upgrade Paymob from test to live keys when approved
-4. Add custom domain in Vercel settings (optional)
+Follow the prompts and add environment variables when asked.
 
 ---
 
-**Need help?** Let me know which step you're on!
+## Step 3: Configure Supabase
+
+After deployment, you need to set up the database schema:
+
+1. Go to your Supabase project dashboard
+2. Navigate to **SQL Editor**
+3. Run the SQL schema from [PLAN.md](PLAN.md) to create all tables
+4. Create storage buckets:
+   - `tool-images` (public)
+   - `kyc-documents` (private)
+5. Enable Row Level Security policies
+
+---
+
+## Step 4: Test the Deployment
+
+Once deployed, test these critical flows:
+
+1. **Homepage**: Verify AI chatbot loads and responds
+2. **Catalog**: Browse tools and search functionality
+3. **Authentication**: Register and login
+4. **Checkout**: Test the payment flow (demo mode)
+5. **Admin**: Access admin dashboard
+
+---
+
+## Post-Deployment Checklist
+
+- [ ] All environment variables configured
+- [ ] Supabase database schema deployed
+- [ ] Storage buckets created
+- [ ] Test user registration flow
+- [ ] Test tool browsing
+- [ ] Test AI chatbot
+- [ ] Test checkout flow
+- [ ] Verify admin dashboard access
+- [ ] Check mobile responsiveness
+
+---
+
+## Troubleshooting
+
+### Build Fails
+- Check all environment variables are set
+- Verify Node.js version compatibility (16.x or higher)
+- Review build logs in Vercel dashboard
+
+### Database Connection Issues
+- Verify Supabase URL and keys are correct
+- Check RLS policies are configured
+- Ensure database schema is deployed
+
+### Payment Integration Issues
+- Verify Paymob credentials are correct
+- Check webhook endpoints are configured
+- Test in demo mode first
+
+---
+
+## Support
+
+For issues or questions:
+- Review [STATUS.md](STATUS.md) for project status
+- Check [AUDIT_REPORT.md](AUDIT_REPORT.md) for known issues
+- Open an issue on GitHub
+
+---
+
+## Security Notes
+
+- Never commit `.env.local` to git
+- Rotate API keys if accidentally exposed
+- Use Vercel's environment variable encryption
+- Enable Vercel's password protection for staging deployments
