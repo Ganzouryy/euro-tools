@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { CheckCircle, XCircle, Clock, FileText } from 'lucide-react'
+import type { Database } from '@/types/database'
+
+type UserUpdate = Database['public']['Tables']['users']['Update']
 
 interface KYCUser {
   id: string
@@ -51,13 +54,16 @@ export default function KYCQueuePage() {
     try {
       const { data: { user: adminUser } } = await supabase.auth.getUser()
 
-      const { error } = await (supabase
+      // Type-safe update for KYC approval
+      const updateData = {
+        kyc_status: 'verified' as const,
+        kyc_reviewed_at: new Date().toISOString(),
+        kyc_reviewed_by: adminUser?.id || null,
+      }
+
+      const { error } = await supabase
         .from('users')
-        .update({
-          kyc_status: 'verified',
-          kyc_reviewed_at: new Date().toISOString(),
-          kyc_reviewed_by: adminUser?.id,
-        }) as any)
+        .update(updateData)
         .eq('id', userId)
 
       if (error) throw error
@@ -79,14 +85,17 @@ export default function KYCQueuePage() {
     try {
       const { data: { user: adminUser } } = await supabase.auth.getUser()
 
-      const { error } = await (supabase
+      // Type-safe update for KYC rejection
+      const updateData = {
+        kyc_status: 'rejected' as const,
+        kyc_rejection_reason: reason,
+        kyc_reviewed_at: new Date().toISOString(),
+        kyc_reviewed_by: adminUser?.id || null,
+      }
+
+      const { error } = await supabase
         .from('users')
-        .update({
-          kyc_status: 'rejected',
-          kyc_rejection_reason: reason,
-          kyc_reviewed_at: new Date().toISOString(),
-          kyc_reviewed_by: adminUser?.id,
-        }) as any)
+        .update(updateData)
         .eq('id', userId)
 
       if (error) throw error
